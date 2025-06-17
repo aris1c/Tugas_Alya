@@ -32,5 +32,5 @@ where cs."Tenure_Months" > tm.rata_rata
 
 
 SELECT user_id,nama_lengkap,email,kota_asal,salary FROM alya_ds50;
-
-----kita upadate ?
+select * from alya_ds50
+---kita upadate ?
