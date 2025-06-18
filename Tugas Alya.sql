@@ -62,8 +62,11 @@ select avg("Quantity"*"Avg_Price")as gmv
 from ecommerce.online_sales
 where "Product_Category" = 'Bags'
 
---Soal 4
+select avg("gmv") from ecommerce.online_sales os 
+where "Product_Category" = 'Bags'
 
+--Soal 4
+--bandingkan semua customer dengan rata rata tiap lokasi
 with tm as(
 select "Location",avg ("Tenure_Months")as rata_rata from ecommerce.customers
 group by "Location"),
@@ -71,10 +74,36 @@ group by "Location"),
 ct as 
 (select * from ecommerce.customers)
 
-select ct."CustomerID",ct."Location" from tm 
+select ct."CustomerID",ct."Location",ct."Tenure_Months",tm."rata_rata" from tm 
 left join ct on ct."Location" = tm."Location"
 where ct."Tenure_Months" > tm.rata_rata
 
+--membandingkan customer terhadap rata rata global customer
+select
+	"CustomerID",
+	"Location"
+from ecommerce.customers c 
+where "Tenure_Months" > (select avg("Tenure_Months")
+							from ecommerce.customers)
+
+--membandingkan customer terhadap rata rata global customer							
+WITH avg_tenure AS (
+    SELECT AVG("Tenure_Months") AS rata_rata
+    FROM ecommerce.customers
+)
+SELECT 
+    "CustomerID",
+    "Location",
+    "Tenure_Months"
+FROM 
+    ecommerce.customers,
+    avg_tenure
+WHERE 
+    "Tenure_Months" > avg_tenure.rata_rata;
+							
+							
+select * from ecommerce.customers c 
+where c."CustomerID" = '12583'
 
 --Soal 5
   select distinct "Transaction_Date", "Location"
